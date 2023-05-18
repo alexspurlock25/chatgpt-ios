@@ -1,6 +1,6 @@
 *.xcconfig
-xcschememanagement.plist
 *.xcworkspace
 xcuserdata/
 xcshareddata/
+xcschememanagement.plist
 
