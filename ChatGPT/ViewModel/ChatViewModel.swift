@@ -51,12 +51,10 @@ class ChatViewModel: ObservableObject {
                     
                     DispatchQueue.main.async {
                         let content = response.choices.first?.message.content ?? "n/a"
-                        
+                    
                         self.conversation.append(Message(sender: "You", text: self.userPrompt))
                         self.conversation.append(Message(sender: "AI", text: content))
                     }
-                    
-                    
                 } catch {
                     print("There was an error decoding.")
                 }
