@@ -12,26 +12,25 @@ struct MessageView: View {
     let message: String
     
     var body: some View {
-        HStack {
-            Text(message)
-            Spacer()
+        if user == "You" {
+            HStack {
+                Text(message)
+                    .foregroundColor(Color.blue)
+                Spacer()
+            }
+            .padding()
+        } else {
+            HStack {
+                Text(message)
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-        let conversation: [Message] = [
-            Message(sender: "User", text: "Hello!"),
-            Message(sender: "Bot", text: "Hi there!"),
-            Message(sender: "User", text: "How are you?"),
-            Message(sender: "Bot", text: "I'm good. Thanks!")
-        ]
-        
-        ForEach(conversation, id: \.self) { message in
-            MessageView(user: message.sender, message: message.text)
-        }
-
+        MessageView(user: "Bot", message: "This is a message.")
     }
 }

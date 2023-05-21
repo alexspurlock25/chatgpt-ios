@@ -13,6 +13,8 @@ class ChatViewModel: ObservableObject {
     @Published var userPrompt: String = ""
     
     func fetchResponse() {
+        self.conversation.append(Message(sender: "You", text: self.userPrompt))
+        
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             print("Invalid URL")
             return
@@ -24,7 +26,6 @@ class ChatViewModel: ObservableObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let requestBody: [String: Any] = [
             "messages": [
-                 ["role": "system", "content": "Act as if your an evil professor and everything you say has to be less than or equal to 200 words."],
                 ["role": "user", "content": userPrompt]
             ],
             "max_tokens": 200,
@@ -51,8 +52,6 @@ class ChatViewModel: ObservableObject {
                     
                     DispatchQueue.main.async {
                         let content = response.choices.first?.message.content ?? "n/a"
-                    
-                        self.conversation.append(Message(sender: "You", text: self.userPrompt))
                         self.conversation.append(Message(sender: "AI", text: content))
                     }
                 } catch {

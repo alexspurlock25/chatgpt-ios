@@ -18,55 +18,41 @@ struct Message: Hashable {
 
 struct ContentView: View {
     @ObservedObject var chatViewModel = ChatViewModel()
-    @State private var contentHeight: CGFloat = 30
-    @State private var isEditing = false
+
 
     var body: some View {
         VStack {
-            ScrollView {
+            List {
                 ForEach(chatViewModel.conversation, id: \.self) { message in
                     MessageView(user: message.sender, message: message.text)
-                    Divider()
                 }
             }
+            .listStyle(.plain)
         
-            Spacer()
             HStack {
-                Spacer()
-                TextEditor(text: $chatViewModel.userPrompt)
-                    .padding(5)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray)
-                    )
-                    .onTapGesture {
-                        isEditing = true
-                    }
-                    .onChange(of: chatViewModel.userPrompt) { newValue in
-                        chatViewModel.userPrompt = newValue
-                    }
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray)
                     
-                
-                VStack {
-                    Button(action: {
-                        chatViewModel.fetchResponse()
-                    }, label: {
-                        Text("Go")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    })
-                    .buttonStyle(.borderedProminent)
-                    
-                    Button("Clear") {
-                        chatViewModel.userPrompt = ""
-                    }
-                    
+                    TextEditor(text: $chatViewModel.userPrompt)
+                        .padding(5)
+                        .background(Color.clear)
+                        .cornerRadius(10)
                 }
-                .frame(minWidth: 0, maxWidth: 70, maxHeight: .infinity, alignment: .trailing)
+                .frame(maxHeight: 100)
+                
+                Button(action: {
+                    chatViewModel.fetchResponse()
+                    chatViewModel.userPrompt = ""
+                }, label: {
+                    Text("Go")
+                        .frame(maxWidth: 30)
+                        .padding()
+                })
+                
             }
-            .frame(maxWidth: .infinity, minHeight: 20, maxHeight: 100)
-            
+            .padding()
         }
-        .padding()
     }
 }
 
